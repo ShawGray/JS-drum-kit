@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+
+
+  <div class="keys">
+    <div data-key="65" class="key" id="A">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key" id="S">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key" id="D">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key" id="F">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key" id="G">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key" id="H">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key" id="J">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key" id="K">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key" id="L">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio data-key="65" id="clap" src="sounds/clap.wav"></audio>
+  <audio data-key="83" id="hihat" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" id="kick" src="sounds/kick.wav"></audio>
+  <audio data-key="70" id="openhat" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" id="boom" src="sounds/boom.wav"></audio>
+  <audio data-key="72" id="ride" src="sounds/ride.wav"></audio>
+  <audio data-key="74" id="snare" src="sounds/snare.wav"></audio>
+  <audio data-key="75" id="tom" src="sounds/tom.wav"></audio>
+  <audio data-key="76" id="tink" src="sounds/tink.wav"></audio>
+
+<script>
+
+  
+function playSound(e) {
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  if(!audio) return; //Stops the function
+  audio.currentTime = 0; // Rewinds audio file to the start so that it can play as many times as you hit the key
+  audio.play();
+  key.classList.add('playing'); // can also use "key.addClass('playing');" - jQuery
+}
+
+function removeTransition(e) {
+  if(e.propertyName !== 'transform') return; //Skips if the property is not transform
+  this.classList.remove('playing');
+}
+  
+const keys = document.querySelectorAll('.key');
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+
+window.addEventListener('keydown', playSound);
+
+function playSoundFromElement(element) {
+  const audio = document.querySelector(`audio[data-key="${element.getAttribute('data-key')}"]`);
+  const key = element;
+  if(!audio) return; //Stops the function
+  audio.currentTime = 0; // Rewinds audio file to the start so that it can play as many times as you hit the key
+  audio.play();
+  key.classList.add('playing'); // can also use "key.addClass('playing');" - jQuery
+}
+
+const keyss = document.querySelectorAll('.key');
+keyss.forEach(key => {
+  key.addEventListener('transitionend', removeTransition);
+  key.addEventListener('click', function() { playSoundFromElement(this) });
+  key.addEventListener('touchstart', function() { playSoundFromElement(this) });
+});
+
+
+</script>
+
+
+</body>
+</html>
